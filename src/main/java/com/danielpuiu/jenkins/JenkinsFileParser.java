@@ -14,7 +14,6 @@ public class JenkinsFileParser {
         JenkinsInstance.prepare();
 
         List<String> lines = Files.readAllLines(Paths.get("src/main/resources/Jenkinsfile"));
-
         ModelASTPipelineDef pipeline = Converter.scriptToPipelineDef(String.join(System.lineSeparator(), lines));
         System.out.println(pipeline.getLibraries());
         System.out.println(pipeline.getOptions());
