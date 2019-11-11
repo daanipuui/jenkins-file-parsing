@@ -1,5 +1,7 @@
 package com.danielpuiu.jenkins;
 
+import hudson.util.PluginServletFilter;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterRegistration;
 import javax.servlet.RequestDispatcher;
@@ -13,6 +15,7 @@ import javax.servlet.descriptor.JspConfigDescriptor;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.EventListener;
 import java.util.Map;
@@ -57,6 +60,9 @@ public class DefaultServletContext implements ServletContext {
 
     @Override
     public Set<String> getResourcePaths(String s) {
+        if (s.equals("/WEB-INF/update-center-rootCAs")) {
+            return Collections.emptySet();
+        }
         return null;
     }
 
@@ -137,6 +143,9 @@ public class DefaultServletContext implements ServletContext {
 
     @Override
     public Object getAttribute(String s) {
+        if (s.equals("hudson.util.PluginServletFilter")) {
+            return new PluginServletFilter();
+        }
         return null;
     }
 
@@ -227,7 +236,7 @@ public class DefaultServletContext implements ServletContext {
 
     @Override
     public SessionCookieConfig getSessionCookieConfig() {
-        return null;
+        return new DefaultSessionCookieConfig();
     }
 
     @Override
