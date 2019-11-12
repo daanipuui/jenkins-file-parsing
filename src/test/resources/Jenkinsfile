@@ -1,6 +1,12 @@
-@Library(['lib1@master', 'lib2@development', 'lib3@feature_branch']) _
+
 
 pipeline {
+
+    libraries {
+        lib('lib1@master')
+        lib('lib2@development')
+        lib('lib3@feature_branch')
+    }
 
     agent any
 
@@ -13,9 +19,25 @@ pipeline {
     }
 
     stages {
-        stage('Trigger pipeline') {
+        stage('Check pre-requirements') {
             steps {
-                echo "Pipeline triggered by ${params.USER}"
+                checkPreRequirements()
+            }
+        }
+
+        stage('Build & Test') {
+            parallel {
+                stage('Build') {
+                    steps {
+                        build()
+                    }
+                }
+
+                stage('Test') {
+                    steps {
+                        test()
+                    }
+                }
             }
         }
     }
